@@ -1,0 +1,52 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Errore: il primo parametro (start/stop/login) è obbligatorio."
+    exit 1
+fi
+
+PORT=${2:-22704}
+
+TUNNEL_PASS="<password>"
+USER_PASS="<password>"
+USER_ID="123123"
+
+PID_FILE="/tmp/hpc_tunnel_ssh_${PORT}.pid"
+
+
+TUNNEL_SSH_CMD="sshpass -p $TUNNEL_PASS ssh -N -L ${PORT}:elgamal.mat.unimo.it:${PORT} student@wks-marongiu2.mat.unimo.it"
+LOGIN_SSH_CMD="sshpass -p $PASSWORD ssh -X -p $PORT $USER_ID@localhost"
+
+
+case $1 in
+    start)
+        if [ -f "$PID_FILE" ]; then
+            echo "Errore: il tunnel SSH è già in esecuzione sulla porta $PORT (PID: $(cat $PID_FILE))"
+            exit 1
+        fi
+        echo "Avvio del tunnel SSH sulla porta $PORT in background..."
+        eval "$TUNNEL_SSH_CMD &"  
+        SSH_PID=$!          
+        echo $SSH_PID > "$PID_FILE"
+        echo "Tunnel SSH avviato con PID: $SSH_PID"
+        ;;
+    stop)
+        if [ ! -f "$PID_FILE" ]; then
+            echo "Errore: nessun tunnel SSH attivo sulla porta $PORT"
+            exit 1
+        fi
+        SSH_PID=$(cat "$PID_FILE")
+        echo "Chiusura del tunnel SSH (PID: $SSH_PID)..."
+        kill $SSH_PID
+        rm "$PID_FILE"
+        echo "Tunnel SSH terminato."
+        ;;
+    login)
+        eval "$LOGIN_SSH_CMD"
+        ;;
+    *)
+        echo "Errore: il primo parametro deve essere 'start', 'stop' o 'login'."
+        exit 1
+        ;;
+esac
+
