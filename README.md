@@ -1,5 +1,5 @@
 # HPC-autologger
-2 basic script for auto logging on ssh tunnel for Unimore's HPC Course
+a basic script for auto logging on ssh tunnel for Unimore's HPC Course
 
 ## Use
 
@@ -17,5 +17,5 @@ hpc-tunnel stop
 To login into your Jetson nano use
 
 ```bash
-hpc-login <OPTIONAL:PORT>
+hpc-tunnel login
 ```
