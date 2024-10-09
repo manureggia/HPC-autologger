@@ -6,7 +6,7 @@
 To start ssh tunnel 
 
 ```bash
-hpc-tunnel start <OPTINAL:PORT>
+hpc-tunnel start <OPTIONAL:PORT>
 ```
 
 To close ssh tunnel
