@@ -8,6 +8,7 @@ To start ssh tunnel
 ```bash
 hpc-tunnel start <OPTIONAL:PORT>
 ```
+> if not specified it will connect to a pre-configured `PORT`
 
 To close ssh tunnel
 
